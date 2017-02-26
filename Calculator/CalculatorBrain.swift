@@ -13,10 +13,12 @@ class CalculatorBrain
 {
     
     private var accumulator = 0.0
+    private var internalProgarm = [AnyObject]()
     
     func setOperand(operrand: Double){
         
         accumulator = operrand
+        internalProgarm.append(operrand)
     }
     
 //    var operation: Dictionary<String,Double> = [
@@ -63,6 +65,8 @@ class CalculatorBrain
     
     func performOperation(symbol: String){
         
+        internalProgarm.append(symbol)
+        
         if let operation = operations[symbol]{
             switch operation {
             
@@ -99,6 +103,46 @@ class CalculatorBrain
         var firstOperand: Double
     }
     
+    
+    typealias PropertyList = AnyObject
+    var progarm: PropertyList{
+        get{
+            
+            return internalProgarm
+        
+        }
+        set{
+        
+        clear()
+            if let arrayOfOps = newValue as? [AnyObject]{
+            
+                for op in arrayOfOps {
+                    if let operand = op as? Double  {
+                    
+                    setOperand(operrand: operand)
+                    
+                    }else if let operation = op as? String {
+                    
+                    performOperation(symbol: operation)
+                    
+                    }
+                
+                
+                }
+            
+            }
+        
+        }
+    
+    
+    }
+    func clear(){
+    
+    accumulator = 0.0
+    pending = nil
+    internalProgarm.removeAll()
+    
+    }
     var result: Double
         {
         
